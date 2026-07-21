@@ -1,8 +1,8 @@
 {
   "collaborators": [
     {
-      "name": "Pablo Martins",
-      "social_links": ["https://github.com/pablo-martins"]
+      "name": "Phyper14",
+      "social_links": ["https://github.com/Phyper14"]
     }
   ],
   "stack": ["go", "redis", "nginx"]
