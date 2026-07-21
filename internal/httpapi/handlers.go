@@ -14,9 +14,9 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/pablo-martins/500mb-club-go/internal/domain"
-	"github.com/pablo-martins/500mb-club-go/internal/metrics"
-	"github.com/pablo-martins/500mb-club-go/internal/storage"
+	"github.com/Phyper14/500mb-golang-challenge/internal/domain"
+	"github.com/Phyper14/500mb-golang-challenge/internal/metrics"
+	"github.com/Phyper14/500mb-golang-challenge/internal/storage"
 )
 
 // MaxBodyBytes caps the size of any request body. Larger bodies are

@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/pablo-martins/500mb-club-go/internal/metrics"
+	"github.com/Phyper14/500mb-golang-challenge/internal/metrics"
 )
 
 // statusRecorder wraps http.ResponseWriter to capture the status code

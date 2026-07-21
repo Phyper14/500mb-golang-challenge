@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/pablo-martins/500mb-club-go/internal/domain"
-	"github.com/pablo-martins/500mb-club-go/internal/storage"
+	"github.com/Phyper14/500mb-golang-challenge/internal/domain"
+	"github.com/Phyper14/500mb-golang-challenge/internal/storage"
 )
 
 // newTestStore spins up an in-memory Redis (miniredis) and returns a Store

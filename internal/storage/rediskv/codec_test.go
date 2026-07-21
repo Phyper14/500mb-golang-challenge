@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/pablo-martins/500mb-club-go/internal/domain"
+	"github.com/Phyper14/500mb-golang-challenge/internal/domain"
 )
 
 func batteryPtr(v float64) *float64 { return &v }

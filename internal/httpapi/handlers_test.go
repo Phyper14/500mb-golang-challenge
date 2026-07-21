@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/pablo-martins/500mb-club-go/internal/domain"
-	"github.com/pablo-martins/500mb-club-go/internal/storagetest"
+	"github.com/Phyper14/500mb-golang-challenge/internal/domain"
+	"github.com/Phyper14/500mb-golang-challenge/internal/storagetest"
 )
 
 func newTestServer(t *testing.T) (*http.ServeMux, *storagetest.FakeStore) {

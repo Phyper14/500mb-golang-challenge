@@ -8,8 +8,8 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"github.com/pablo-martins/500mb-club-go/internal/domain"
-	"github.com/pablo-martins/500mb-club-go/internal/storage"
+	"github.com/Phyper14/500mb-golang-challenge/internal/domain"
+	"github.com/Phyper14/500mb-golang-challenge/internal/storage"
 )
 
 // DefaultMaxPointsPerDevice bounds the number of points retained per

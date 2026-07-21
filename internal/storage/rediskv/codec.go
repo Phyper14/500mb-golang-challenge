@@ -10,7 +10,7 @@ import (
 	"math"
 	"math/rand/v2"
 
-	"github.com/pablo-martins/500mb-club-go/internal/domain"
+	"github.com/Phyper14/500mb-golang-challenge/internal/domain"
 )
 
 // pointEncodedLen is the fixed size, in bytes, of an encoded point:

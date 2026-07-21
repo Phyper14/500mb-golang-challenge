@@ -16,9 +16,9 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/pablo-martins/500mb-club-go/internal/config"
-	"github.com/pablo-martins/500mb-club-go/internal/httpapi"
-	"github.com/pablo-martins/500mb-club-go/internal/storage/rediskv"
+	"github.com/Phyper14/500mb-golang-challenge/internal/config"
+	"github.com/Phyper14/500mb-golang-challenge/internal/httpapi"
+	"github.com/Phyper14/500mb-golang-challenge/internal/storage/rediskv"
 )
 
 func main() {

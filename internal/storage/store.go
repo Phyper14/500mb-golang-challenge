@@ -7,7 +7,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/pablo-martins/500mb-club-go/internal/domain"
+	"github.com/Phyper14/500mb-golang-challenge/internal/domain"
 )
 
 // ErrUnavailable is returned by Ping when the backing store cannot be

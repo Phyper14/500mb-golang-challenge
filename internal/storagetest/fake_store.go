@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/pablo-martins/500mb-club-go/internal/domain"
-	"github.com/pablo-martins/500mb-club-go/internal/storage"
+	"github.com/Phyper14/500mb-golang-challenge/internal/domain"
+	"github.com/Phyper14/500mb-golang-challenge/internal/storage"
 )
 
 // FakeStore is a minimal, concurrency-safe in-memory implementation of

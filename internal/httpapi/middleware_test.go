@@ -8,7 +8,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/pablo-martins/500mb-club-go/internal/metrics"
+	"github.com/Phyper14/500mb-golang-challenge/internal/metrics"
 )
 
 func TestInstrumentMetrics_RecordsRequestWithRoutePattern(t *testing.T) {
