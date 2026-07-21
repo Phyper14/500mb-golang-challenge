@@ -1,0 +1,28 @@
+# Binaries
+/bin/
+/dist/
+/api
+*.exe
+
+# Go build/test artifacts
+*.test
+*.out
+coverage.out
+coverage.html
+
+# Go module cache markers (never commit vendor unless explicitly vendoring)
+/vendor/
+
+# Editors / OS
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Local-only compose overrides used during development
+docker-compose.local.yml
+docker-compose.override.yml
+
+# k6 output artifacts
+*.summary.json

@@ -1,0 +1,9 @@
+{
+  "collaborators": [
+    {
+      "name": "Pablo Martins",
+      "social_links": ["https://github.com/pablo-martins"]
+    }
+  ],
+  "stack": ["go", "redis", "nginx"]
+}
