@@ -39,5 +39,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/500mb-club-go:${{ github.ref_name }}
-            ghcr.io/${{ github.repository_owner }}/500mb-club-go:latest
+            ghcr.io/${{ github.repository_owner }}/500mb-golang-challenge:${{ github.ref_name }}
+            ghcr.io/${{ github.repository_owner }}/500mb-golang-challenge:latest
