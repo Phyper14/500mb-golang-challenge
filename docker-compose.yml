@@ -11,7 +11,7 @@
 
 services:
   api-1: &api
-    image: ghcr.io/Phyper14/500mb-golang-challenge:latest
+    image: ghcr.io/phyper14/500mb-golang-challenge:latest
     environment:
       LISTEN_ADDR: ":8000"
       INSTANCE_ID: "api-1"
