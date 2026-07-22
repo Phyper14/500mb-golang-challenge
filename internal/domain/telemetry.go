@@ -4,6 +4,7 @@
 package domain
 
 import (
+	"encoding/json"
 	"errors"
 	"math"
 	"regexp"
@@ -51,13 +52,47 @@ func ValidDeviceID(id string) bool {
 
 // Point is a single telemetry reading from a device.
 type Point struct {
-	TS      int64    `json:"ts"`
-	Lat     float64  `json:"lat"`
-	Lon     float64  `json:"lon"`
-	Battery *float64 `json:"battery,omitempty"`
-	AX      float64  `json:"ax"`
-	AY      float64  `json:"ay"`
-	AZ      float64  `json:"az"`
+	TS      int64   `json:"ts"`
+	Lat     float64 `json:"lat"`
+	Lon     float64 `json:"lon"`
+	Battery float64 `json:"-"` // Handled via custom marshaler
+	HasBattery bool `json:"-"`
+	AX      float64 `json:"ax"`
+	AY      float64 `json:"ay"`
+	AZ      float64 `json:"az"`
+}
+
+// MarshalJSON implements json.Marshaler.
+func (p Point) MarshalJSON() ([]byte, error) {
+	type Alias Point
+	aux := struct {
+		Alias
+		Battery *float64 `json:"battery,omitempty"`
+	}{
+		Alias: (Alias)(p),
+	}
+	if p.HasBattery {
+		aux.Battery = &p.Battery
+	}
+	return json.Marshal(aux)
+}
+
+// UnmarshalJSON implements json.Unmarshaler.
+func (p *Point) UnmarshalJSON(data []byte) error {
+	type Alias Point
+	aux := struct {
+		Alias
+		Battery *float64 `json:"battery,omitempty"`
+	}{}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	*p = Point(aux.Alias)
+	if aux.Battery != nil {
+		p.Battery = *aux.Battery
+		p.HasBattery = true
+	}
+	return nil
 }
 
 // Magnitude returns sqrt(ax^2 + ay^2 + az^2).
@@ -78,7 +113,7 @@ func (p Point) Validate() error {
 	if p.Lon < -180 || p.Lon > 180 {
 		return ErrOutOfRange
 	}
-	if p.Battery != nil && (*p.Battery < 0 || *p.Battery > 1) {
+	if p.HasBattery && (p.Battery < 0 || p.Battery > 1) {
 		return ErrOutOfRange
 	}
 	if !isFinite(p.AX) || !isFinite(p.AY) || !isFinite(p.AZ) {

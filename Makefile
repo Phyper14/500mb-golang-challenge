@@ -1,6 +1,6 @@
 .PHONY: build test test-race test-cover lint vet fmt tidy docker-build compose-up compose-down smoke test-load clean
 
-MODULE := github.com/pablo-martins/500mb-club-go
+MODULE := github.com/Phyper14/500mb-golang-challenge
 BINARY := bin/api
 IMAGE  := 500mb-club-go:local
 

@@ -95,10 +95,15 @@ type telemetryRequest struct {
 }
 
 func (r telemetryRequest) toPoint() domain.Point {
-	return domain.Point{
-		TS: r.TS, Lat: r.Lat, Lon: r.Lon, Battery: r.Battery,
+	p := domain.Point{
+		TS: r.TS, Lat: r.Lat, Lon: r.Lon,
 		AX: r.AX, AY: r.AY, AZ: r.AZ,
 	}
+	if r.Battery != nil {
+		p.Battery = *r.Battery
+		p.HasBattery = true
+	}
+	return p
 }
 
 // handlePostTelemetry ingests a single point.
@@ -266,8 +271,11 @@ func (s *Server) handleGetTelemetry(w http.ResponseWriter, r *http.Request) {
 	resp := rangeResponse{Points: make([]telemetryPointResponse, len(page.Points))}
 	for i, p := range page.Points {
 		resp.Points[i] = telemetryPointResponse{
-			TS: p.TS, Lat: p.Lat, Lon: p.Lon, Battery: p.Battery,
+			TS: p.TS, Lat: p.Lat, Lon: p.Lon,
 			AX: p.AX, AY: p.AY, AZ: p.AZ,
+		}
+		if p.HasBattery {
+			resp.Points[i].Battery = &p.Battery
 		}
 	}
 	if page.NextCursor != "" {

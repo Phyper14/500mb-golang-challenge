@@ -22,11 +22,11 @@ func TestEncodeDecodePoint_RoundTrip(t *testing.T) {
 		},
 		{
 			name: "with battery",
-			give: domain.Point{TS: 1715800000100, Lat: 90, Lon: 180, Battery: batteryPtr(0.82), AX: 0, AY: 0, AZ: 0},
+			give: domain.Point{TS: 1715800000100, Lat: 90, Lon: 180, Battery: 0.82, HasBattery: true, AX: 0, AY: 0, AZ: 0},
 		},
 		{
 			name: "battery zero (must distinguish from unset)",
-			give: domain.Point{TS: 1, Lat: -90, Lon: -180, Battery: batteryPtr(0), AX: -1.5, AY: -2.5, AZ: -3.5},
+			give: domain.Point{TS: 1, Lat: -90, Lon: -180, Battery: 0, HasBattery: true, AX: -1.5, AY: -2.5, AZ: -3.5},
 		},
 		{
 			name: "negative accelerations",
@@ -51,11 +51,11 @@ func TestEncodeDecodePoint_RoundTrip(t *testing.T) {
 			assert.InDelta(t, tt.give.AY, got.AY, 1e-12)
 			assert.InDelta(t, tt.give.AZ, got.AZ, 1e-12)
 
-			if tt.give.Battery == nil {
-				assert.Nil(t, got.Battery)
+			if !tt.give.HasBattery {
+				assert.False(t, got.HasBattery)
 			} else {
-				require.NotNil(t, got.Battery)
-				assert.InDelta(t, *tt.give.Battery, *got.Battery, 1e-12)
+				assert.True(t, got.HasBattery)
+				assert.InDelta(t, tt.give.Battery, got.Battery, 1e-12)
 			}
 		})
 	}

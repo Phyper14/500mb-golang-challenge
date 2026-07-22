@@ -9,12 +9,10 @@
 # Storage: redis (allowlisted, in-memory K/V — lowest overhead of the
 # four accepted engines for this write-heavy workload).
 
-services:
-  api-1: &api
+x-api-common: &api
     image: ghcr.io/phyper14/500mb-golang-challenge:latest
     environment:
       LISTEN_ADDR: ":8000"
-      INSTANCE_ID: "api-1"
       REDIS_ADDR: "redis:6379"
       REDIS_POOL_SIZE: "8"
       MAX_POINTS_PER_DEVICE: "5000"
@@ -30,11 +28,23 @@ services:
     networks: [backend]
     depends_on: [redis]
 
-  api-2:
+services:
+  api-1:
     <<: *api
     environment:
       LISTEN_ADDR: ":8000"
+      INSTANCE_ID: "api-1"
+      REDIS_ADDR: "redis:6379"
+      REDIS_POOL_SIZE: "8"
+      MAX_POINTS_PER_DEVICE: "5000"
+      SHUTDOWN_TIMEOUT: "10s"
+
+
+  api-2:
+    <<: *api
+    environment:
       INSTANCE_ID: "api-2"
+      LISTEN_ADDR: ":8000"
       REDIS_ADDR: "redis:6379"
       REDIS_POOL_SIZE: "8"
       MAX_POINTS_PER_DEVICE: "5000"
@@ -43,8 +53,8 @@ services:
   api-3:
     <<: *api
     environment:
-      LISTEN_ADDR: ":8000"
       INSTANCE_ID: "api-3"
+      LISTEN_ADDR: ":8000"
       REDIS_ADDR: "redis:6379"
       REDIS_POOL_SIZE: "8"
       MAX_POINTS_PER_DEVICE: "5000"

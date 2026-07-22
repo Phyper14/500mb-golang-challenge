@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func battery(v float64) *float64 { return &v }
+// No battery helper needed
 
 func TestValidDeviceID(t *testing.T) {
 	tests := []struct {
@@ -86,7 +86,7 @@ func TestPoint_Validate(t *testing.T) {
 		},
 		{
 			name:    "valid point with battery",
-			give:    Point{TS: 1, Lat: 0, Lon: 0, Battery: battery(0.5), AX: 0, AY: 0, AZ: 0},
+			give:    Point{TS: 1, Lat: 0, Lon: 0, Battery: 0.5, HasBattery: true, AX: 0, AY: 0, AZ: 0},
 			wantErr: nil,
 		},
 		{
@@ -126,17 +126,17 @@ func TestPoint_Validate(t *testing.T) {
 		},
 		{
 			name:    "battery above range",
-			give:    Point{TS: 1, Lat: 0, Lon: 0, Battery: battery(1.1), AX: 0, AY: 0, AZ: 0},
+			give:    Point{TS: 1, Lat: 0, Lon: 0, Battery: 1.1, HasBattery: true, AX: 0, AY: 0, AZ: 0},
 			wantErr: ErrOutOfRange,
 		},
 		{
 			name:    "battery below range",
-			give:    Point{TS: 1, Lat: 0, Lon: 0, Battery: battery(-0.1), AX: 0, AY: 0, AZ: 0},
+			give:    Point{TS: 1, Lat: 0, Lon: 0, Battery: -0.1, HasBattery: true, AX: 0, AY: 0, AZ: 0},
 			wantErr: ErrOutOfRange,
 		},
 		{
 			name:    "battery boundary zero valid",
-			give:    Point{TS: 1, Lat: 0, Lon: 0, Battery: battery(0), AX: 0, AY: 0, AZ: 0},
+			give:    Point{TS: 1, Lat: 0, Lon: 0, Battery: 0, HasBattery: true, AX: 0, AY: 0, AZ: 0},
 			wantErr: nil,
 		},
 		{
