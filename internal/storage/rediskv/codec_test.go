@@ -9,7 +9,7 @@ import (
 	"github.com/Phyper14/500mb-golang-challenge/internal/domain"
 )
 
-func batteryPtr(v float64) *float64 { return &v }
+// func batteryPtr(v float64) *float64 { return &v }
 
 func TestEncodeDecodePoint_RoundTrip(t *testing.T) {
 	tests := []struct {
