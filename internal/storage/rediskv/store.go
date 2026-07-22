@@ -57,19 +57,18 @@ func (s *Store) Close() error {
 }
 
 // InsertPoint persists a single point and trims the device's history to
-// maxPointsPerDevice.
+// maxPointsPerDevice in a single pipeline round trip.
 func (s *Store) InsertPoint(ctx context.Context, id string, p domain.Point) error {
 	k := key(id)
 	member := EncodePoint(p)
 
-	pipe := s.client.TxPipeline()
+	pipe := s.client.Pipeline()
 	pipe.ZAdd(ctx, k, redis.Z{Score: float64(p.TS), Member: member})
-	card := pipe.ZCard(ctx, k)
+	pipe.ZRemRangeByRank(ctx, k, 0, -s.maxPointsPerDevice-1)
 	if _, err := pipe.Exec(ctx); err != nil {
 		return fmt.Errorf("rediskv: insert point: %w", err)
 	}
-
-	return s.trim(ctx, k, card.Val())
+	return nil
 }
 
 // InsertBatch persists multiple points in a single pipeline round trip
@@ -86,30 +85,15 @@ func (s *Store) InsertBatch(ctx context.Context, id string, points []domain.Poin
 		members[i] = redis.Z{Score: float64(p.TS), Member: EncodePoint(p)}
 	}
 
-	pipe := s.client.TxPipeline()
+	pipe := s.client.Pipeline()
 	pipe.ZAdd(ctx, k, members...)
-	card := pipe.ZCard(ctx, k)
+	pipe.ZRemRangeByRank(ctx, k, 0, -s.maxPointsPerDevice-1)
 	if _, err := pipe.Exec(ctx); err != nil {
 		return 0, fmt.Errorf("rediskv: insert batch: %w", err)
-	}
-
-	if err := s.trim(ctx, k, card.Val()); err != nil {
-		return 0, err
 	}
 	return len(points), nil
 }
 
-// trim removes the oldest members beyond maxPointsPerDevice, if any.
-func (s *Store) trim(ctx context.Context, k string, count int64) error {
-	stop := count - s.maxPointsPerDevice - 1
-	if stop < 0 {
-		return nil // within budget, nothing to trim
-	}
-	if err := s.client.ZRemRangeByRank(ctx, k, 0, stop).Err(); err != nil {
-		return fmt.Errorf("rediskv: trim: %w", err)
-	}
-	return nil
-}
 
 // QueryRange returns points for device id with ts in [from, to], ordered
 // ascending by ts, paginated via an exclusive-lower-bound cursor (the ts
@@ -147,7 +131,7 @@ func (s *Store) QueryRange(ctx context.Context, id string, from, to int64, limit
 
 	points := make([]domain.Point, 0, len(res))
 	for _, member := range res {
-		p, decErr := DecodePoint([]byte(member))
+		p, decErr := DecodePointString(member)
 		if decErr != nil {
 			continue // corrupted member; skip rather than fail the whole page
 		}
@@ -171,7 +155,7 @@ func (s *Store) RecentWindow(ctx context.Context, id string) ([]domain.Point, er
 
 	points := make([]domain.Point, 0, len(res))
 	for _, member := range res {
-		p, decErr := DecodePoint([]byte(member))
+		p, decErr := DecodePointString(member)
 		if decErr != nil {
 			continue
 		}

@@ -9,6 +9,7 @@ import (
 	"errors"
 	"math"
 	"math/rand/v2"
+	"unsafe"
 
 	"github.com/Phyper14/500mb-golang-challenge/internal/domain"
 )
@@ -69,6 +70,16 @@ func EncodePoint(p domain.Point) []byte {
 	off += 8
 
 	return buf
+}
+
+// DecodePointString reverses EncodePoint directly from a string member without
+// heap allocation.
+func DecodePointString(s string) (domain.Point, error) {
+	if len(s) < pointEncodedLen {
+		return domain.Point{}, errShortBuffer
+	}
+	b := unsafe.Slice(unsafe.StringData(s), len(s))
+	return DecodePoint(b)
 }
 
 // DecodePoint reverses EncodePoint. It returns errShortBuffer if buf is

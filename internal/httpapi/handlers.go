@@ -7,7 +7,6 @@ package httpapi
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -199,7 +198,11 @@ func (s *Server) handlePostTelemetryBatch(w http.ResponseWriter, r *http.Request
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
-	_, _ = fmt.Fprintf(w, "%s%d%s", batchResponsePrefix, accepted, batchResponseSuffix)
+	var buf [32]byte
+	b := strconv.AppendInt(buf[:0], int64(accepted), 10)
+	_, _ = w.Write([]byte(batchResponsePrefix))
+	_, _ = w.Write(b)
+	_, _ = w.Write([]byte(batchResponseSuffix))
 }
 
 // telemetryPointResponse and rangeResponse mirror the wire format of GET
@@ -284,7 +287,9 @@ func (s *Server) handleGetTelemetry(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(resp)
+	if body, jsonErr := json.Marshal(resp); jsonErr == nil {
+		_, _ = w.Write(body)
+	}
 }
 
 type anomalyResponse struct {
@@ -326,7 +331,9 @@ func (s *Server) handleGetAnomaly(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(resp)
+	if body, jsonErr := json.Marshal(resp); jsonErr == nil {
+		_, _ = w.Write(body)
+	}
 }
 
 // readLimitedBody reads the request body up to MaxBodyBytes+1. If the
