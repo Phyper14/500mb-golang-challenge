@@ -52,15 +52,12 @@ func EncodePoint(p domain.Point) []byte {
 
 	if p.HasBattery {
 		buf[off] = 1
+		binary.BigEndian.PutUint64(buf[off+1:], math.Float64bits(p.Battery))
+	} else {
+		buf[off] = 0
+		binary.BigEndian.PutUint64(buf[off+1:], 0)
 	}
-	off++
-
-	var batteryVal float64
-	if p.HasBattery {
-		batteryVal = p.Battery
-	}
-	binary.BigEndian.PutUint64(buf[off:], math.Float64bits(batteryVal))
-	off += 8
+	off += 9
 
 	binary.BigEndian.PutUint64(buf[off:], math.Float64bits(p.AX))
 	off += 8
